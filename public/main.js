@@ -1,8 +1,8 @@
-console.log("UTILS.....");
-
 var chatApp;
 var contract;
 let privateKey;
+
+// check if private key exist
 if (
     localStorage.getItem("Private_Key") == null ||
     localStorage.getItem("Private_Key") == undefined
@@ -72,64 +72,73 @@ async function getPublicKey() {
     }
 }
 async function sendMessage() {
-    msg = document.getElementById("_msg").value;
-    getRoomName();
-    getPublicKey();
-    _roomName = roomName;
+    try {
+        msg = document.getElementById("_msg").value;
+        getRoomName();
+        getPublicKey();
+        _roomName = roomName;
 
-    res = await axios
-        .post(`/app/sendMessage`, {
-            privateKey: privateKey,
-            publicKey: publicKey,
-            message: msg,
-            room: roomName,
-            address: address,
-        })
-        .then((res) => {
-            console.log(res);
-            console.log(res.data);
-        });
+        res = await axios
+            .post(`/app/sendMessage`, {
+                privateKey: privateKey,
+                publicKey: publicKey,
+                message: msg,
+                room: roomName,
+                address: address,
+            })
+            .then((res) => {
+                console.log(res);
+                console.log(res.data);
+            });
 
-    seemessage();
+        seemessage();
+    } catch (err) {
+        alert(err.message);
+    }
 }
 
 async function seemessage() {
-    getPublicKey();
-    await getRoomName();
-    msg = await axios.post(`/app/getMessage`, {
-        privateKey: privateKey,
-        publicKey: publicKey,
-        room: roomName,
-        address: address,
-    });
+    try {
+        getPublicKey();
+        await getRoomName();
+        msg = await axios.post(`/app/getMessage`, {
+            privateKey: privateKey,
+            publicKey: publicKey,
+            room: roomName,
+            address: address,
+        });
 
-    // if (msg) {}
+        if (msg.data.message === "error") {
+            alert(msg.message);
+        }
+        console.log("this is error " + JSON.stringify(msg));
 
-    console.log("this is error " + msg);
+        const countMsg = await contract.methods
+            .getMessageCountForRoom(roomName)
+            .call();
 
-    const countMsg = await contract.methods
-        .getMessageCountForRoom(roomName)
-        .call();
+        // console.log(countMsg);
 
-    // console.log(countMsg);
+        const seeMsg1 = await contract.methods
+            .getMessageByIndexForRoom(roomName, 0)
+            .call();
 
-    const seeMsg1 = await contract.methods
-        .getMessageByIndexForRoom(roomName, 0)
-        .call();
+        // console.log(seeMsg1);
 
-    // console.log(seeMsg1);
+        $("#messageul").show();
+        $(".messageLi").remove();
 
-    $("#messageul").show();
-    $(".messageLi").remove();
-
-    for (i = 0; i < msg.data.length; i++) {
-        li = `<li class="messageLi">
+        for (i = 0; i < msg.data.length; i++) {
+            li = `<li class="messageLi">
     <div class="container darker">
         <p>${msg.data[i].message}</p>
         <span> Time:${msg.data[i].time}</span>
-    </div>
+        </div>
 </li>`;
-        $("#messageul").append(li);
+            $("#messageul").append(li);
+        }
+    } catch (err) {
+        alert(err.message);
     }
 }
 async function writemessage() {

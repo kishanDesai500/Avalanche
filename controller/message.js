@@ -72,7 +72,7 @@ module.exports = {
             return res.status(200).send(msg);
         } catch (err) {
             console.log(err);
-            return res.status(500).send(err.message);
+            return res.send({ status: "error", message: err.message });
         }
     },
 };
