@@ -1,0 +1,39 @@
+<head>
+    <title>Caht App - Blockchain</title>
+
+    <link rel="stylesheet" href="style.css">
+    <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' rel='stylesheet' type='text/css'>
+    <!-- <script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script> -->
+    <!-- <script src="./index.js"></script> -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.7.0/web3.min.js" integrity="sha512-C63V0mFzwl8KV2fRz0QJNKX0d9877urOLSUq5WUq8nUOhDl69hKdGr9mAvl57k47GNjqEMAtiufsvDnk7xs8+w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script type="text/javascript" src="./main.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.25.0/axios.js" integrity="sha512-II/TvxJGs27N3NEu/WWRFtyhBdSByZwS5ovX1vHXVsi2JXj0I5hRvHwgBPKbzZDk0wsKVDoEUEI8rAYGEF394A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+</head>
+
+<body onload="init()">
+
+    <h1 class="page-header">Chat Application - Blockchain </h1>
+
+    <button class="btn light" onclick="seemessage()">see messages</button>
+    <button class="btn light" onclick="writemessage()">write message</button>
+
+    <div style="width: fit-content; text-align: center; display: none;" id="inputbox">
+        <input type="text" id="_msg" value="" placeholder="Message..." class="form-control">
+        <button type="submit" onclick="sendMessage()" class="btn btn-primary mb-5" style="margin-top: 10px;">Send</button>
+    </div>
+
+    <div>
+        <ul id="messageul" style="list-style: none;">
+
+        </ul>
+    </div>
+
+</body>
+
+</html>
